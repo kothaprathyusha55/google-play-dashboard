@@ -125,7 +125,6 @@ elif plot_type == "Column Data Chart":
         ax4.set_ylabel("Column")
         st.pyplot(fig4)
 
-# 🥧 Pie Chart: App distribution by Category
 elif plot_type == "Pie Chart":
     st.header("🥧 Pie Chart: App Distribution by Category")
 
@@ -134,17 +133,18 @@ elif plot_type == "Pie Chart":
     else:
         category_counts = df_filtered["Category"].value_counts().head(10)
 
-        fig5, ax5 = plt.subplots(figsize=(8, 8))
+        fig5, ax5 = plt.subplots(figsize=(5, 5))  # Reduced size here
         ax5.pie(
             category_counts,
             labels=category_counts.index,
             autopct='%1.1f%%',
             startangle=140,
-            textprops={'fontsize': 10}
+            textprops={'fontsize': 9}
         )
         ax5.axis('equal')
-        ax5.set_title("Top 10 Categories by App Count", fontsize=14)
+        ax5.set_title("Top 10 Categories by App Count", fontsize=12)
         st.pyplot(fig5)
+
 
 # Footer
 st.markdown("<hr><center>Made with ❤️ using Streamlit | Dataset: Google Play Store</center>", unsafe_allow_html=True)
