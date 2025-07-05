@@ -26,7 +26,7 @@ selected_genres = st.sidebar.multiselect("Select Genre(s)", top_genres, default=
 
 # Plot options
 plot_type = st.sidebar.radio("Select Plot to Display", [
-    "Bar Chart", "Violin Plot", "Heatmap", "Column Data Chart", "Pie Chart"
+    "Bar Chart", "Violin Plot", "Heatmap", "Pie Chart"
 ])
 
 # Metric for Bar Chart
