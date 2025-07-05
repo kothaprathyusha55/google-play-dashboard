@@ -39,6 +39,30 @@ ax.set_title(f"Top 10 Categories by {metric}", fontsize=16)
 ax.set_xlabel(f"Total {metric}", fontsize=12)
 ax.set_ylabel("Category", fontsize=12)
 st.pyplot(fig)
+
+
+# ---- Existing bar plot above here ----
+
+st.markdown("## 🎻 Violin Plot: Ratings per Category")
+st.info("Showing distribution of app Ratings across most frequent categories.")
+
+# Prepare data for violin plot
+df_cleaned["Rating"] = pd.to_numeric(df_cleaned["Rating"], errors="coerce")
+df_cleaned.dropna(subset=["Rating", "Category"], inplace=True)
+
+# Get top 10 categories by number of apps
+top_categories = df_cleaned["Category"].value_counts().head(10).index.tolist()
+df_violin = df_cleaned[df_cleaned["Category"].isin(top_categories)]
+
+# Plot violin
+fig2, ax2 = plt.subplots(figsize=(12, 6))
+sns.violinplot(data=df_violin, x="Rating", y="Category", palette="coolwarm", ax=ax2)
+ax2.set_title("Violin Plot of App Ratings per Category", fontsize=16)
+ax2.set_xlabel("Rating")
+ax2.set_ylabel("Category")
+st.pyplot(fig2)
+
+
 # Heatmap: Average Installs by Content Rating (SOCIAL vs EDUCATION)
 st.header("🔥 Heatmap: SOCIAL vs EDUCATION Category Installs by Content Rating")
 
