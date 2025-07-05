@@ -89,6 +89,21 @@ elif plot_type == "Heatmap":
         ax3.set_xlabel("Content Rating")
         ax3.set_ylabel("Category")
         st.pyplot(fig3)
+# Plot 4: Pie Chart - Non-null values in each column
+elif plot_type == "Pie Chart":
+    st.header("🥧 Pie Chart: Non-Null Values in Each Column")
+    st.info("This chart shows the proportion of usable (non-empty) data for each column.")
+
+    # Count non-null values
+    column_counts = df.notnull().sum()
+    column_counts = column_counts[column_counts > 0]  # Only columns with some data
+
+    fig4, ax4 = plt.subplots(figsize=(10, 8))
+    ax4.pie(column_counts, labels=column_counts.index, autopct='%1.1f%%', startangle=90, textprops={'fontsize': 10})
+    ax4.axis('equal')  # Equal aspect ratio
+    ax4.set_title("Non-Null Values in Columns", fontsize=14)
+    st.pyplot(fig4)
+
 
 # Footer
 st.markdown("<hr><center>Made with ❤️ using Streamlit | Dataset: Google Play Store</center>", unsafe_allow_html=True)
