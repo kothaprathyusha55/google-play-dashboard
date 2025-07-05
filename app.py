@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Streamlit page settings
+# Page config
 st.set_page_config(page_title="Google Play Store Dashboard", layout="wide")
 
 # Load data
@@ -17,28 +17,26 @@ df = load_data()
 # Sidebar filters
 st.sidebar.header("🔍 Filter Options")
 
-# Dropdown: Content Rating
-content_ratings = df["Content Rating"].dropna().unique().tolist()
-selected_rating = st.sidebar.selectbox("Select Content Rating", sorted(content_ratings))
+# Multi-select for Content Rating
+content_ratings = sorted(df["Content Rating"].dropna().unique().tolist())
+selected_ratings = st.sidebar.multiselect("Select Content Rating(s)", content_ratings, default=["Teen"])
 
-# Dropdown: Genres
-genres = df["Genres"].dropna().unique().tolist()
-selected_genre = st.sidebar.selectbox("Select Genre", sorted(genres))
+# Multi-select for Genres
+genres = sorted(df["Genres"].dropna().unique().tolist())
+selected_genres = st.sidebar.multiselect("Select Genre(s)", genres, default=[genres[0]])
 
-# Dropdown: Plot type
+# Plot selector
 plot_type = st.sidebar.radio("Select Plot to Display", ["Bar Chart", "Violin Plot", "Heatmap", "Pie Chart"])
-
-# Dropdown: Metric
 metric = st.sidebar.radio("Metric for Bar Chart", ["Reviews", "Installs"])
 
-# Title
+# Page header
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>📊 Google Play Store App Dashboard</h1>", unsafe_allow_html=True)
-st.markdown(f"<h4 style='text-align: center;'>Analysis for <span style='color:#F63366'>{selected_rating}</span> Content & <span style='color:#1f77b4'>{selected_genre}</span> Genre</h4><hr>", unsafe_allow_html=True)
+st.markdown(f"<h4 style='text-align: center;'>Analysis for <span style='color:#F63366'>{', '.join(selected_ratings)}</span> Ratings and <span style='color:#1f77b4'>{', '.join(selected_genres)}</span> Genres</h4><hr>", unsafe_allow_html=True)
 
-# Filter dataset
+# Filter data
 df_filtered = df[
-    (df["Content Rating"] == selected_rating) & 
-    (df["Genres"] == selected_genre)
+    (df["Content Rating"].isin(selected_ratings)) &
+    (df["Genres"].isin(selected_genres))
 ].copy()
 
 # Clean columns
@@ -83,7 +81,7 @@ elif plot_type == "Violin Plot":
 
 # Plot: Heatmap
 elif plot_type == "Heatmap":
-    st.header("🔥 Heatmap: SOCIAL vs EDUCATION Category Installs")
+    st.header("🔥 Heatmap: SOCIAL vs EDUCATION Installs")
 
     df_heat = df_filtered[df_filtered["Category"].isin(["SOCIAL", "EDUCATION"])]
     if df_heat.empty:
@@ -97,15 +95,12 @@ elif plot_type == "Heatmap":
             fill_value=0
         )
 
-        if selected_rating not in pivot.columns:
-            st.warning(f"No data for heatmap with Content Rating '{selected_rating}'")
-        else:
-            fig3, ax3 = plt.subplots(figsize=(10, 6))
-            sns.heatmap(pivot[[selected_rating]], annot=True, fmt='.0f', cmap='Blues', ax=ax3)
-            ax3.set_title("Average Installs for SOCIAL vs EDUCATION", fontsize=14)
-            ax3.set_xlabel("Content Rating")
-            ax3.set_ylabel("Category")
-            st.pyplot(fig3)
+        fig3, ax3 = plt.subplots(figsize=(10, 6))
+        sns.heatmap(pivot, annot=True, fmt='.0f', cmap='Blues', ax=ax3)
+        ax3.set_title("Average Installs for SOCIAL vs EDUCATION", fontsize=14)
+        ax3.set_xlabel("Content Rating")
+        ax3.set_ylabel("Category")
+        st.pyplot(fig3)
 
 # Plot: Pie Chart
 elif plot_type == "Pie Chart":
