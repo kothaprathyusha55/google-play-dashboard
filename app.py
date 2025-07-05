@@ -39,5 +39,32 @@ ax.set_title(f"Top 10 Categories by {metric}", fontsize=16)
 ax.set_xlabel(f"Total {metric}", fontsize=12)
 ax.set_ylabel("Category", fontsize=12)
 st.pyplot(fig)
+# Heatmap: Average Installs by Content Rating (SOCIAL vs EDUCATION)
+st.header("🔥 Heatmap: SOCIAL vs EDUCATION Category Installs by Content Rating")
+
+# Clean 'Installs'
+df['Installs'] = df['Installs'].astype(str).str.replace('[+,]', '', regex=True)
+df['Installs'] = pd.to_numeric(df['Installs'], errors='coerce')
+
+# Filter for SOCIAL and EDUCATION only
+df_filtered = df[df['Category'].isin(['SOCIAL', 'EDUCATION'])]
+
+# Pivot table: average installs by Content Rating
+pivot = df_filtered.pivot_table(
+    index='Category',
+    columns='Content Rating',
+    values='Installs',
+    aggfunc='mean',
+    fill_value=0
+)
+
+# Plot heatmap
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.heatmap(pivot, annot=True, fmt='.0f', cmap='Blues', ax=ax)
+ax.set_title("Average Installs by Content Rating (SOCIAL vs EDUCATION)", fontsize=14)
+ax.set_xlabel("Content Rating")
+ax.set_ylabel("Category")
+
+st.pyplot(fig)
 
 st.markdown("<hr><center>Made with ❤️ using Streamlit | Dataset: Google Play Store</center>", unsafe_allow_html=True)
