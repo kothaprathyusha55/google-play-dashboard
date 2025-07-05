@@ -107,24 +107,6 @@ elif plot_type == "Heatmap":
         ax3.set_ylabel("Category")
         st.pyplot(fig3)
 
-# 📊 Column Data Chart (Bar of non-null values)
-elif plot_type == "Column Data Chart":
-    st.header("📊 Column Data Completeness (Bar Chart Style)")
-
-    column_counts = df_filtered.notnull().sum()
-    column_counts = column_counts[column_counts > 0]
-
-    if column_counts.empty:
-        st.warning("No data available to show column chart.")
-    else:
-        column_counts = column_counts.sort_values()
-        fig4, ax4 = plt.subplots(figsize=(10, 6))
-        sns.barplot(x=column_counts.values, y=column_counts.index, palette="coolwarm", ax=ax4)
-        ax4.set_title("Non-Null Value Counts per Column", fontsize=14)
-        ax4.set_xlabel("Number of Non-Null Values")
-        ax4.set_ylabel("Column")
-        st.pyplot(fig4)
-
 elif plot_type == "Pie Chart":
     st.header("🥧 Pie Chart: App Distribution by Category")
 
