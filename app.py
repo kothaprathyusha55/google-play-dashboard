@@ -21,11 +21,11 @@ st.sidebar.header("🔍 Filter Options")
 content_ratings = sorted(df["Content Rating"].dropna().unique().tolist())
 selected_ratings = st.sidebar.multiselect("Select Content Rating(s)", content_ratings, default=["Teen"])
 
-# Multi-select for Genres
-genres = sorted(df["Genres"].dropna().unique().tolist())
-selected_genres = st.sidebar.multiselect("Select Genre(s)", genres, default=[genres[0]])
+# Multi-select for top 10 Genres only
+top_genres = df["Genres"].value_counts().head(10).index.tolist()
+selected_genres = st.sidebar.multiselect("Select Genre(s)", top_genres, default=[top_genres[0]])
 
-# Plot selector
+# Plot type and metric selection
 plot_type = st.sidebar.radio("Select Plot to Display", ["Bar Chart", "Violin Plot", "Heatmap", "Pie Chart"])
 metric = st.sidebar.radio("Metric for Bar Chart", ["Reviews", "Installs"])
 
@@ -33,20 +33,20 @@ metric = st.sidebar.radio("Metric for Bar Chart", ["Reviews", "Installs"])
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>📊 Google Play Store App Dashboard</h1>", unsafe_allow_html=True)
 st.markdown(f"<h4 style='text-align: center;'>Analysis for <span style='color:#F63366'>{', '.join(selected_ratings)}</span> Ratings and <span style='color:#1f77b4'>{', '.join(selected_genres)}</span> Genres</h4><hr>", unsafe_allow_html=True)
 
-# Filter data
+# Filter dataset
 df_filtered = df[
     (df["Content Rating"].isin(selected_ratings)) &
     (df["Genres"].isin(selected_genres))
 ].copy()
 
-# Clean columns
+# Clean and process data
 df_filtered["Reviews"] = pd.to_numeric(df_filtered["Reviews"], errors='coerce')
 df_filtered["Installs"] = df_filtered["Installs"].astype(str).str.replace("[+,]", "", regex=True)
 df_filtered["Installs"] = pd.to_numeric(df_filtered["Installs"], errors='coerce')
 df_filtered["Rating"] = pd.to_numeric(df_filtered["Rating"], errors='coerce')
 df_filtered.dropna(subset=["Category", "Reviews", "Installs", "Rating"], inplace=True)
 
-# Plot: Bar Chart
+# Bar Chart
 if plot_type == "Bar Chart":
     if df_filtered.empty:
         st.warning("No data available for the selected filters.")
@@ -62,7 +62,7 @@ if plot_type == "Bar Chart":
         ax.set_ylabel("Category")
         st.pyplot(fig)
 
-# Plot: Violin Plot
+# Violin Plot
 elif plot_type == "Violin Plot":
     if df_filtered.empty:
         st.warning("No data available for the selected filters.")
@@ -79,7 +79,7 @@ elif plot_type == "Violin Plot":
         ax2.tick_params(axis='x', rotation=45)
         st.pyplot(fig2)
 
-# Plot: Heatmap
+# Heatmap
 elif plot_type == "Heatmap":
     st.header("🔥 Heatmap: SOCIAL vs EDUCATION Installs")
 
@@ -102,7 +102,7 @@ elif plot_type == "Heatmap":
         ax3.set_ylabel("Category")
         st.pyplot(fig3)
 
-# Plot: Pie Chart
+# Pie Chart
 elif plot_type == "Pie Chart":
     st.header("🥧 Pie Chart: Non-Null Values in Columns")
     column_counts = df_filtered.notnull().sum()
