@@ -115,12 +115,12 @@ elif plot_type == "Pie Chart":
     else:
         category_counts = df_filtered["Category"].value_counts().head(10)
 
-        fig5, ax5 = plt.subplots(figsize=(5, 5))  # Reduced size here
+        fig5, ax5 = plt.subplots(figsize=(3.5, 3.5))  # Reduced size here
         ax5.pie(
             category_counts,
             labels=category_counts.index,
             autopct='%1.1f%%',
-            startangle=140,
+            startangle=100,
             textprops={'fontsize': 9}
         )
         ax5.axis('equal')
