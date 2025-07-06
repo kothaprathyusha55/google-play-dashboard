@@ -121,7 +121,7 @@ elif plot_type == "Pie Chart":
             labels=category_counts.index,
             autopct='%1.1f%%',
             startangle=100,
-            textprops={'fontsize': 9}
+            textprops={'fontsize': 3}
         )
         ax5.axis('equal')
         ax5.set_title("Top 10 Categories by App Count", fontsize=6)
