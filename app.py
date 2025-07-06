@@ -124,7 +124,7 @@ elif plot_type == "Pie Chart":
             textprops={'fontsize': 2}
         )
         ax5.axis('equal')
-        ax5.set_title("Top 10 Categories by App Count", fontsize=6)
+        ax5.set_title("Top 10 Categories by App Count", fontsize=4)
         st.pyplot(fig5)
 
 
