@@ -74,7 +74,7 @@ elif plot_type == "Violin Plot":
         top_categories = df_filtered["Category"].value_counts().head(10).index.tolist()
         df_violin = df_filtered[df_filtered["Category"].isin(top_categories)]
 
-        fig2, ax2 = plt.subplots(figsize=(14, 6))
+        fig2, ax2 = plt.subplots(figsize=(8,2))
         sns.violinplot(data=df_violin, x="Category", y="Rating", palette="Spectral", ax=ax2)
         ax2.set_title("Violin Plot of Ratings per Category", fontsize=16)
         ax2.set_xlabel("Category")
