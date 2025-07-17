@@ -57,7 +57,7 @@ if plot_type == "Bar Chart":
         top_data = df_filtered.groupby("Category")[metric].sum().sort_values(ascending=False).head(10)
         st.success(f"✅ Category with highest {metric.lower()}: **{top_data.idxmax()}** ({int(top_data.max()):,})")
 
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax = plt.subplots(figsize=(8,2))
         colors = "magma" if metric == "Installs" else "viridis"
         sns.barplot(x=top_data.values, y=top_data.index, palette=colors, ax=ax)
         ax.set_title(f"Top 10 Categories by {metric}", fontsize=16)
